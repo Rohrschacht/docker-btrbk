@@ -1,0 +1,26 @@
+name: Build and push to Docker Hub
+
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  GIT_TAG: ${GITHUB_REF##*/}
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: rohrschacht/btrbk:latest, rohrschacht/btrbk:${{ env.GIT_TAG }}
