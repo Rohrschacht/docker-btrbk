@@ -21,6 +21,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v3
+        env:
+          GIT_TAG: ${GITHUB_REF##*/}
         with:
           push: true
-          tags: rohrschacht/btrbk:latest, rohrschacht/btrbk:${GITHUB_REF##*/}
+          tags: rohrschacht/btrbk:latest, rohrschacht/btrbk:${{ env.GIT_TAG }}
